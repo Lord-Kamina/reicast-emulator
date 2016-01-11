@@ -1,4 +1,4 @@
-.\" retroarch.1:
+.\" reicast.1:
 
 .TH  "REICAST" "1" "August 22, 2015" "REICAST" "System Manager's Manual: reicast"
 
@@ -22,11 +22,31 @@ reicast
 
 .TP
 \fBOverride the image specified in the config file to load a specific image.\fR
-reicast /path/to/your/image.cdi
+reicast /path/to/your/image.gdi
 
 .TP
 \fBStart reicast on X11 in full screen.\fR
 reicast -config x11:fullscreen=1
+
+.SH "CONFIG FILE"
+
+.TP
+The config file for \fBreicast\fR can be found at:
+
+.IP
+~/.config/reicast/emu.cfg
+.LP
+
+.SH "VMU SAVE FILE"
+
+.TP
+The VMU save files can be found at ~/.local/share/reicast/, by default \fBreicast\fR will create two VMU files for the first controller:
+
+.IP
+~/.local/share/reicast/vmu_save_A1.bin
+.br
+~/.local/share/reicast/vmu_save_A2.bin
+.LP
 
 .SH "BIOS AND FLASH ROMS"
 
@@ -34,9 +54,9 @@ reicast -config x11:fullscreen=1
 \fBreicast\fR currently needs BIOS/Flash ROMs of the original Dreamcast. For copyright reasons it is not possible to distribute them bundled with \fBreicast\fR, so you have to dump them from your own Dreamcast. \fBreicast\fR will look for these files in:
 
 .IP
-~/.reicast/data/dc_boot.bin
+~/.local/share/reicast/data/dc_boot.bin
 .br
-~/.reicast/data/dc_flash.bin
+~/.local/share/reicast/data/dc_flash.bin
 .LP
 
 If you do not supply these files, \fBreicast\fR will fall back to reios, an experimental replacement for the original Dreamcast BIOS. However, your experience might not be as stable and some feature might be missing (e.g. booting to the Dreamcast menu will NOT work).
@@ -87,7 +107,11 @@ Temporarily override a value of the config file.
 
 .TP
 \fB[IMAGE FILE]\fR
-Load a specific image file. If no image is given on the command line, reicast will use the value of the "image" option in the "config" section of the config file.
+Load a specific image file.
+
+Although \fBReicast\fR supports images in GDI, CHDv4 and CDI format, you should avoid CDI images since they often have issues.
+
+If no image is given on the command line, reicast will use the value of the "image" option in the "config" section of the config file.
 
 .SH "AUTHOR"
 

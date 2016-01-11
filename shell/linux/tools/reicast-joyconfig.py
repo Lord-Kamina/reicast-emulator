@@ -45,9 +45,11 @@ def clear_events(dev):
         event = dev.read_one()
         while(event is not None):
             event = dev.read_one()
-    except BlockingIOError:
+    except (OSError, IOError):
         # BlockingIOErrors should only occur if someone uses the evdev
-        # module < v0.4.4
+        # module < v0.4.4. BlockingIOError inherits from OSError, so we
+        # catch that for Python 2 compatibility. We also catch IOError,
+        # just in case.
         pass
 
 
@@ -85,10 +87,10 @@ def read_axis_or_key(dev, absinfos):
 def print_mapped_button(name, event):
     try:
         code_id = evdev.ecodes.BTN[event.code]
-    except IndexError:
+    except (IndexError, KeyError):
         try:
             code_id = evdev.ecodes.KEY[event.code]
-        except IndexError:
+        except (IndexError, KeyError):
             code_id = None
     if type(code_id) is list:
         code_id = code_id[0]
@@ -99,7 +101,7 @@ def print_mapped_button(name, event):
 def print_mapped_axis(name, event, axis_inverted=False):
     try:
         code_id = evdev.ecodes.ABS[event.code]
-    except IndexError:
+    except (IndexError, KeyError):
         code_id = None
     if type(code_id) is list:
         code_id = code_id[0]
@@ -132,7 +134,7 @@ def setup_device(dev_id):
         clear_events(dev)
         print("Press the that button now...")
         event = read_button(dev)
-        mapping.set("dreamcast", "btn_escape", event.code)
+        mapping.set("emulator", "btn_escape", event.code)
         print_mapped_button("emulator escape button", event)
 
     # Regular dreamcast buttons
